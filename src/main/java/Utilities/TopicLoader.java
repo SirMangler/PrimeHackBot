@@ -37,12 +37,13 @@ public class TopicLoader {
 		StringBuilder answer = null;
 		for (String line : lines) {
 			if (line.isEmpty() || line.equalsIgnoreCase("")) {
-				if (t != null)
-					topics.add(t);
-				
-				t = null;
-				
-				continue;
+				if (answer == null) {
+					if (t != null)
+						topics.add(t);
+					
+					t = null;
+					continue;
+				}				
 			}
 			
 			if (line.startsWith("[")) {
