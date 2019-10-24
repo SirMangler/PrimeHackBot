@@ -130,7 +130,7 @@ public class TopicLoader {
 		}
 		
 		try {
-			Files.write(topicspath, builder.toString().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+			Files.write(topicspath, builder.toString().getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (IOException e) {
 			PrimeLogger.severe("Could not write to topics.cfg");
 			e.printStackTrace();

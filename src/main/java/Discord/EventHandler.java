@@ -29,7 +29,11 @@ public class EventHandler extends ListenerAdapter {
 			if (e.getMessage().getContentRaw().startsWith("!")) {
 				TopicLoader.getAllTopics().forEach(topic -> {
 					if (e.getMessage().getContentDisplay().startsWith("!"+topic.topic)) {
-						e.getTextChannel().sendMessage(Topic.displayTopic(topic)).queue(queueSuccess, queueError);
+						e.getTextChannel().sendMessage(Topic.displayTopic(topic)).queue(success -> {
+							PrimeLogger.info("<%1> %2", success.getTextChannel().getName(), success.getContentDisplay());
+							
+							e.getMessage().delete().complete();
+						}, queueError);
 						return;
 					}
 				});
@@ -74,6 +78,8 @@ public class EventHandler extends ListenerAdapter {
 			return Commands.removeTopic(vars);
 		case "gettopic":
 			return Commands.getTopic(vars);
+		case "listtopics":
+			return Commands.getListTopics(vars);
 		case "setimage":
 			return Commands.setImage(vars);
 		case "setanswer":

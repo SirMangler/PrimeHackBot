@@ -59,8 +59,6 @@ public class Commands {
 		if (t == null) {
 			return new MessageBuilder("Topic `"+vars[1]+"` does not exist!").build();
 		} else {
-			PrimeLogger.info("Setting topic '%1' answer to '%2'", t.topic, t.answer);
-		
 			TopicLoader.removeTopic(t);
 			
 			return new MessageBuilder("Topic `"+vars[1]+"` was removed!").build();
@@ -271,6 +269,22 @@ public class Commands {
 		}
 	}
 	
+	public static Message getListTopics(String[] vars) {
+		EmbedBuilder b = new EmbedBuilder();
+		b.setTitle("PrimeBot Admin Commands");
+		b.setColor(8913098);
+		
+		StringBuilder strb = new StringBuilder();
+		for (Topic t : TopicLoader.getAllTopics())
+			strb.append(t.topic+"\n");
+		
+		if (strb.toString().isEmpty()) strb.append("No topics found. Type `!commands`");
+		
+		b.setDescription(strb.toString());
+		
+		return new MessageBuilder(b.build()).build();
+	}
+	
 	public static Message adminCommands(String[] vars) {
 		EmbedBuilder b = new EmbedBuilder();
 		b.setTitle("PrimeBot Admin Commands");
@@ -283,6 +297,7 @@ public class Commands {
 				"```css\nsetWikiLink [topic] [link] /*sets the wiki_link*/```"+
 				"```css\naddPattern [topic] [pattern] /*adds regex pattern*/```"+
 				"```css\nremovePattern [topic] [pattern] /*removes regex pattern*/```"+
+				"```css\nlistTopics /*Lists all topics.*/```"+
 				"```css\ncommands /*Shows this.*/```"
 				);
 		
