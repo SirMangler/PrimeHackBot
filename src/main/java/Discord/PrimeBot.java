@@ -10,6 +10,8 @@ import Utilities.TopicLoader;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.core.entities.Game.GameType;
 import net.dv8tion.jda.core.entities.Role;
 
 /**
@@ -58,6 +60,8 @@ public class PrimeBot {
 			
 			if (admin == null)
 				PrimeLogger.severe("The admin role cannot be found!");
+			
+			jda.getPresence().setGame(Game.of(GameType.LISTENING, "the depths of space"));
 			
 		} catch (LoginException e) {
 			e.printStackTrace();

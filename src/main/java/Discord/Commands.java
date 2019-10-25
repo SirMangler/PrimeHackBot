@@ -2,8 +2,6 @@ package Discord;
 
 import java.util.ArrayList;
 
-import org.jsoup.helper.StringUtil;
-
 import TopicDetection.Topic;
 import Utilities.PrimeLogger;
 import Utilities.TopicLoader;
@@ -109,7 +107,7 @@ public class Commands {
 				answer[i-2] = vars[i];
 			}
 			
-			t.answer = StringUtil.join(answer, " ").replaceAll("\\\\n", "\n");
+			t.answer = String.join(" ", answer).replaceAll("\\\\n", "\n");
 			PrimeLogger.info("Setting topic '%1' answer to '%2'", t.topic, t.answer);
 			
 			TopicLoader.setTopic(vars[1], t);
@@ -172,7 +170,7 @@ public class Commands {
 				wiki[i-2] = vars[i];
 			}
 			
-			t.wiki_link = StringUtil.join(wiki, " ");
+			t.wiki_link = String.join(" ", wiki);
 			PrimeLogger.info("Setting topic '%1' wiki_link to '%2'", t.topic, t.answer);
 			
 			TopicLoader.setTopic(vars[1], t);
@@ -206,7 +204,7 @@ public class Commands {
 				pattern[i-2] = vars[i];
 			}
 			
-			String newpattern = StringUtil.join(pattern, " ");
+			String newpattern = String.join(" ", pattern);
 			
 			if (t.regex == null)
 				t.regex = new ArrayList<String>();

@@ -64,7 +64,7 @@ public class Configuration {
 		
 		StringBuilder b = new StringBuilder();
 		b.append("token="+token+"\n\r");
-		b.append("debug="+String.valueOf(debug)+"\n\r");
+		//b.append("debug="+String.valueOf(debug)+"\n\r");
 		
 		Files.write(cfgpath, b.toString().getBytes());
 	}
