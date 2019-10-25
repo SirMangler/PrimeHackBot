@@ -21,3 +21,8 @@ The Adam Malkocich bot made for the [PrimeHack Discord](https://discord.gg/hYp5N
 
 # topics.cfg
 This file is where topics are stored. Refer to the commands to modify this.
+
+# Build Requirements
+- JavaSE/JRE 1.8
+- Maven
+- Eclipse (might not be required but it was built for eclipse)
