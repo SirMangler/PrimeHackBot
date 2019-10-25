@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,6 +16,7 @@ public class Configuration {
 
 	public static String token;
 	public static boolean debug;
+	public static List<String> bot_controllers = new ArrayList<String>();
 	
 	static Path cfgpath = Paths.get(System.getProperty("user.dir"), "primebot.cfg");
 	
@@ -43,8 +45,8 @@ public class Configuration {
 			case "token":				
 				token = val;
 				break;
-			case "debug":
-				debug = Boolean.valueOf(val);
+			case "bot-controller":
+				bot_controllers.add(val);
 				break;
 			}
 		}
@@ -54,7 +56,6 @@ public class Configuration {
 		Files.createFile(cfgpath);
 		
 		token = "";
-		debug = false;
 		
 		saveConfiguration();
 	}
@@ -64,7 +65,9 @@ public class Configuration {
 		
 		StringBuilder b = new StringBuilder();
 		b.append("token="+token+"\n\r");
-		//b.append("debug="+String.valueOf(debug)+"\n\r");
+		for (String controller : bot_controllers) {
+			b.append("bot-controller="+controller+"\n\r");
+		}
 		
 		Files.write(cfgpath, b.toString().getBytes());
 	}

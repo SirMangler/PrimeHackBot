@@ -1,6 +1,8 @@
 package Discord;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.security.auth.login.LoginException;
 
@@ -21,8 +23,8 @@ import net.dv8tion.jda.core.entities.Role;
  */
 public class PrimeBot {
 
-	public static Role mod;
-	public static Role admin;
+	public static List<Role> botroles = new ArrayList<Role>();
+	
 	private static JDA jda;
 	public static void main(String[] args) {
 		try {
@@ -51,18 +53,15 @@ public class PrimeBot {
 			
 			PrimeLogger.info("Adding EventHandler");
 			jda.addEventListener(new EventHandler());
+
+			Configuration.bot_controllers.forEach(controller -> {
+				Role r = jda.getRoleById(controller);
+				if (r == null) {
+					PrimeLogger.severe("Cannot retrieve bot controller role: %1", controller);
+				} else botroles.add(r);			
+			});
 			
-			mod = jda.getRoleById("385208116221968385"); //jda.getRoleById("290916002231746571");// // // primehack mod
-			admin = jda.getRoleById("385203760886054912");		
-			
-			if (mod == null) 
-				PrimeLogger.severe("The moderator role cannot be found!");
-			
-			if (admin == null)
-				PrimeLogger.severe("The admin role cannot be found!");
-			
-			jda.getPresence().setGame(Game.of(GameType.LISTENING, "the depths of space"));
-			
+			jda.getPresence().setGame(Game.of(GameType.LISTENING, "the depths of space"));	
 		} catch (LoginException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {

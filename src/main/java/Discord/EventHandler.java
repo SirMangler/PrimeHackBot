@@ -8,6 +8,7 @@ import Utilities.PrimeLogger;
 import Utilities.TopicLoader;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -27,6 +28,16 @@ public class EventHandler extends ListenerAdapter {
 
 		if (e.getTextChannel().canTalk()) {
 			if (e.getMessage().getContentRaw().startsWith("!")) {
+				for (Role role : PrimeBot.botroles) {			
+					if (e.getMember().getRoles().contains(role)) {
+						Message message = parseCommand(e.getMessage().getContentRaw().substring(1));
+
+						if (message != null)
+							e.getTextChannel().sendMessage(message).queue(queueSuccess, queueError);
+						return;
+					}
+				}
+				
 				TopicLoader.getAllTopics().forEach(topic -> {
 					if (e.getMessage().getContentDisplay().startsWith("!"+topic.topic)) {
 						e.getTextChannel().sendMessage(Topic.displayTopic(topic)).queue(success -> {
@@ -37,17 +48,8 @@ public class EventHandler extends ListenerAdapter {
 						return;
 					}
 				});
-
-				if (e.getMember().getRoles().contains(PrimeBot.admin)
-						|| e.getMember().getRoles().contains(PrimeBot.mod)) {
-					Message message = parseCommand(e.getMessage().getContentRaw().substring(1));
-
-					if (message != null)
-						e.getTextChannel().sendMessage(message).queue(queueSuccess, queueError);
-					return;
-				}
 			}
-
+	
 			TopicLoader.getAllTopics().forEach(topic -> {
 				if (topic.regex != null)
 					topic.regex.forEach(pattern -> {
