@@ -17,7 +17,7 @@ The Adam Malkocich bot made for the [PrimeHack Discord](https://discord.gg/hYp5N
 
 # primebot.cfg
 - token= `Place your token here.`
-- bot-controller= `Add the role id for who you want to control this bot. You can add multiple lines of this to add multiple roles`
+- bot-controller= `Add the role id for who you want to control this bot. You can add this multiple times to add multiple roles`
 
 # topics.cfg
 This file is where topics are stored. Refer to the commands to modify this.
