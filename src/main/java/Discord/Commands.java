@@ -292,6 +292,7 @@ public class Commands {
 				"```css\nremoveTopic [topic] /*removes an auto response topic*/```"+
 				"```css\ngetTopic [topic] /*displays the topic*/```"+
 				"```css\nsetAnswer [topic] [answer] /*sets the response*/```"+
+				"```css\nsetImage [topic] [image_url] /*Set's the image to embed*/```"+
 				"```css\nsetWikiLink [topic] [link] /*sets the wiki_link*/```"+
 				"```css\naddPattern [topic] [pattern] /*adds regex pattern*/```"+
 				"```css\nremovePattern [topic] [pattern] /*removes regex pattern*/```"+
