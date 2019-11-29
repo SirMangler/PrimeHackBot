@@ -102,7 +102,7 @@ public class Configuration {
 		
 		for (String controller : bot_controllers) {
 			b.append("bot-controller="+controller+"\n\r");
-		}
+		} 
 		
 		Files.write(cfgpath, b.toString().getBytes());
 	}
