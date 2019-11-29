@@ -10,6 +10,7 @@ import Utilities.Configuration;
 import Utilities.PrimeLogger;
 import Utilities.TopicLoader;
 import net.dv8tion.jda.core.MessageBuilder;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Role;
@@ -46,9 +47,10 @@ public class EventHandler extends ListenerAdapter {
 										e.getMessage().getContentRaw().substring(1), m, e.getMessage());
 						}
 						
-						if (message != null)
+						if (message != null) {
 							e.getTextChannel().sendMessage(message).queue(queueSuccess, queueError);
-						return;
+							return;
+						}
 					}
 				}
 			}
@@ -56,17 +58,18 @@ public class EventHandler extends ListenerAdapter {
 			TopicLoader.getAllTopics().forEach(topic -> {
 				if (topic.regex != null)
 					for (String pattern : topic.regex) {
-						if (Pattern.matches(pattern, e.getMessage().getContentRaw())) {
+						if (Pattern.matches(pattern, e.getMessage().getContentRaw().toLowerCase())) {
 							e.getTextChannel().sendMessage(Topic.displayTopic(topic)).queue(queueSuccess, queueError);
 							return;
 						}
 					}	
 				
-				if (e.getMessage().getContentDisplay().startsWith("!"+topic.topic)) {
+				if (e.getMessage().getContentDisplay().toLowerCase().startsWith("!"+topic.topic)) {
 					e.getTextChannel().sendMessage(Topic.displayTopic(topic)).queue(success -> {
 						PrimeLogger.info("<%1> %2", success.getTextChannel().getName(), success.getContentDisplay());
 						
-						e.getMessage().delete().complete();
+						if (e.getGuild().getSelfMember().hasPermission(new Permission[] { Permission.MESSAGE_MANAGE }))
+							e.getMessage().delete().complete();
 					}, queueError);
 					return;
 				}
