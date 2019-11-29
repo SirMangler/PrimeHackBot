@@ -18,6 +18,11 @@ public class Configuration {
 	public static boolean debug;
 	public static List<String> bot_controllers = new ArrayList<String>();
 	
+	public static String mute_role_id;
+	public static String gate_emote_id;
+	public static String gate_role_id;
+	public static String gate_message_id;
+	
 	static Path cfgpath = Paths.get(System.getProperty("user.dir"), "primebot.cfg");
 	
 	public static void loadConfiguration() throws IOException {
@@ -45,10 +50,35 @@ public class Configuration {
 			case "token":				
 				token = val;
 				break;
+			case "mute-role":				
+				mute_role_id = val;
+				break;
+			case "gate-emote":				
+				gate_emote_id = val;
+				break;
+			case "gate-role":				
+				gate_role_id = val;
+				break;
+			case "gate-react-message":				
+				gate_message_id = val;
+				break;
 			case "bot-controller":
 				bot_controllers.add(val);
 				break;
 			}
+		}
+	}
+	
+	public static void setGateReact(String message_id, String role_id, String emote_id) {
+		gate_message_id = message_id;
+		gate_role_id = role_id;
+		gate_emote_id = emote_id;
+		
+		try {
+			saveConfiguration();
+		} catch (IOException e) {
+			PrimeLogger.severe("Failed to save Gate React info");
+			e.printStackTrace();
 		}
 	}
 	

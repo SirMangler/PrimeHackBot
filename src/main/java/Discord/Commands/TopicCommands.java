@@ -1,8 +1,8 @@
-package Discord;
+package Discord.Commands;
 
 import java.util.ArrayList;
 
-import TopicDetection.Topic;
+import Types.Topic;
 import Utilities.PrimeLogger;
 import Utilities.TopicLoader;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -14,7 +14,7 @@ import net.dv8tion.jda.core.entities.Message;
  *
  * @date 23 Oct 2019
  */
-public class Commands {
+public class TopicCommands {
 
 	static EmbedBuilder template = new EmbedBuilder();
 	
@@ -297,7 +297,10 @@ public class Commands {
 				"```css\naddPattern [topic] [pattern] /*adds regex pattern*/```"+
 				"```css\nremovePattern [topic] [pattern] /*removes regex pattern*/```"+
 				"```css\nlistTopics /*Lists all topics.*/```"+
-				"```css\ncommands /*Shows this.*/```"
+				"```css\ncommands /*Shows this.*/```"+
+				"```css\nwarn [user] [reason] /*Warns the user*/```"+
+				"```css\nwarns [user] /*Lists a user's warns.*/```"+
+				"```css\ngatereactionrole /*Set's up a reaction role designed to be a gateway.*/```"
 				);
 		
 		return new MessageBuilder(b).build();

@@ -8,7 +8,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
-import TopicDetection.Topic;
+import Types.Topic;
 
 /**
  * @author SirMangler

@@ -9,6 +9,7 @@ import javax.security.auth.login.LoginException;
 import Utilities.Configuration;
 import Utilities.PrimeLogger;
 import Utilities.TopicLoader;
+import Utilities.WarnsLoader;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -24,8 +25,8 @@ import net.dv8tion.jda.core.entities.Role;
 public class PrimeBot {
 
 	public static List<Role> botroles = new ArrayList<Role>();
-	
-	private static JDA jda;
+
+	public static JDA jda;
 	public static void main(String[] args) {
 		try {
 			try {
@@ -42,6 +43,8 @@ public class PrimeBot {
 				PrimeLogger.severe("Error when initially loading topics");
 				e.printStackTrace();
 			}
+			
+			WarnsLoader.loadWarns();
 			
 			if (Configuration.token == null || Configuration.token.isEmpty()) {
 				PrimeLogger.severe("No token found! Please add one to the primebot.cfg file!");
