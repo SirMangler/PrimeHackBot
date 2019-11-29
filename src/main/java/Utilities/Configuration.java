@@ -95,6 +95,11 @@ public class Configuration {
 		
 		StringBuilder b = new StringBuilder();
 		b.append("token="+token+"\n\r");
+		b.append("mute-role="+mute_role_id+"\n\r");
+		b.append("gate-emote="+gate_emote_id+"\n\r");
+		b.append("gate-role="+gate_role_id+"\n\r");
+		b.append("gate-react-message="+gate_message_id+"\n\r");
+		
 		for (String controller : bot_controllers) {
 			b.append("bot-controller="+controller+"\n\r");
 		}
