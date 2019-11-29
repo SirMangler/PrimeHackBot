@@ -14,10 +14,16 @@ The Adam Malkocich bot made for the [PrimeHack Discord](https://discord.gg/hYp5N
 - removePattern [topic] [index] `Removes a Regex Pattern from the detector`
 - listTopics `Lists all topics`
 - commands `Shows this list`
+- warn [user] [reason] `Warns a user for the specified reason, and issues a punishment.`
+- warns [user] `Lists a user's past warnings`
+- gateReactRole [message-id] [@role|role-id] [emote-name|emote-id] `Adds a specified reaction to a specified message, when this reaction is clicked it will add the specified role. This is designed to grant entry to a server.`
 
 # primebot.cfg
 - token= `Place your bot token here.`
 - bot-controller= `Add the ID of the Role which you want to be able to use moderator commands. You can add this multiple times to add multiple roles`
+- gate-emote `The id of the emote used in the gateway`
+- gate-role `This role issued by the gateway button.`
+- gate-react-message `The message id that the reaction is associated with`
 
 # topics.cfg
 This file is where topics are stored. Refer to the commands to modify this.
