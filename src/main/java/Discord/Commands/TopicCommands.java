@@ -84,7 +84,7 @@ public class TopicCommands {
 			}
 			
 			embedcontent.append("**answer** = `"+t.answer+"`\n");
-			embedcontent.append("**wiki_link** = `"+t.wiki_link+"`\n");
+			if (t.aliases != null) embedcontent.append("**aliases** = ` "+String.join(";", t.aliases)+" `\n");
 			embedcontent.append("**image_url** = `"+t.image_url+"`\n");
 			
 			embed.setDescription(embedcontent);
@@ -156,7 +156,7 @@ public class TopicCommands {
 		}
 	}
 	
-	public static Message setWikiLink(String[] vars) {
+	public static Message setAliases(String[] vars) {
 		if (vars.length < 2) {
 			return new MessageBuilder("Syntax: setWikiLink [topicname] [wiki_link]").build();
 		}
@@ -165,13 +165,13 @@ public class TopicCommands {
 		if (t == null) {
 			return new MessageBuilder("Topic `"+vars[1]+"` does not exist!").build();
 		} else {
-			String[] wiki = new String[vars.length-2];
+			String[] aliases = new String[vars.length-2];
 			for (int i = 2; i < vars.length; i++) {
-				wiki[i-2] = vars[i];
+				aliases[i-2] = vars[i];
 			}
 			
-			t.wiki_link = String.join(" ", wiki);
-			PrimeLogger.info("Setting topic '%1' wiki_link to '%2'", t.topic, t.answer);
+			t.aliases = aliases;
+			PrimeLogger.info("Setting topic '%1' aliases to '%2'", t.topic, t.aliases.toString());
 			
 			TopicLoader.setTopic(vars[1], t);
 			
@@ -184,7 +184,7 @@ public class TopicCommands {
 			MessageBuilder b = new MessageBuilder();
 			
 			b.setEmbed(m.getEmbeds().get(0));
-			b.setContent("Added wiki_link.");
+			b.setContent("Set aliases.");
 			
 			return b.build();
 		}

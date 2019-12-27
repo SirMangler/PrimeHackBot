@@ -59,13 +59,29 @@ public class EventHandler extends ListenerAdapter {
 				if (topic.regex != null)
 					for (String pattern : topic.regex) {
 						if (Pattern.matches(pattern, e.getMessage().getContentRaw().toLowerCase())) {
-							e.getTextChannel().sendMessage(Topic.displayTopic(topic)).queue(queueSuccess, queueError);
+							e.getTextChannel().sendMessage(Topic.displayTopic(topic, "Triggered by: "+e.getMember().getEffectiveName())).queue(queueSuccess, queueError);
 							return;
 						}
 					}	
 				
+				boolean invoked = false;
+				
 				if (e.getMessage().getContentDisplay().toLowerCase().startsWith("!"+topic.topic)) {
-					e.getTextChannel().sendMessage(Topic.displayTopic(topic)).queue(success -> {
+					invoked = true;
+				} else {
+					if (topic.aliases != null)
+						for (String t : topic.aliases)
+						{
+							if (e.getMessage().getContentDisplay().toLowerCase().startsWith("!"+t))
+							{
+								invoked = true;
+								break;
+							}
+						}
+				}
+				
+				if (invoked) {
+					e.getTextChannel().sendMessage(Topic.displayTopic(topic, "Invoked by: "+e.getMember().getEffectiveName())).queue(success -> {
 						PrimeLogger.info("<%1> %2", success.getTextChannel().getName(), success.getContentDisplay());
 						
 						if (e.getGuild().getSelfMember().hasPermission(new Permission[] { Permission.MESSAGE_MANAGE }))
@@ -118,8 +134,8 @@ public class EventHandler extends ListenerAdapter {
 			return TopicCommands.setImage(vars);
 		case "setanswer":
 			return TopicCommands.setAnswer(vars);
-		case "setwikilink":
-			return TopicCommands.setWikiLink(vars);
+		case "setaliases":
+			return TopicCommands.setAliases(vars);
 		case "addpattern":
 			return TopicCommands.addPattern(vars);
 		case "removepattern":

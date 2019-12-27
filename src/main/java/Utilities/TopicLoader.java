@@ -56,9 +56,16 @@ public class TopicLoader {
 				t.regex.add(line.substring(8));
 				continue;
 			}
-			
-			if (line.startsWith("wiki_link = ")) {
-				t.wiki_link = line.substring(12);
+				
+			if (line.startsWith("aliases = ")) {
+				String alias = line.substring(10);
+				
+				if (!alias.isEmpty()) {
+					if (alias.contains(";"))
+						t.aliases = alias.split(";");
+					else t.aliases = new String[] { alias };
+				}
+
 				continue;
 			}
 			
@@ -120,8 +127,8 @@ public class TopicLoader {
 			if (t.answer != null)
 				builder.append("answer = \""+t.answer+"\"\r\n");
 			
-			if (t.wiki_link != null)
-				builder.append("wiki_link = "+t.wiki_link+"\r\n");
+			if (t.aliases != null)
+				builder.append("aliases = "+String.join(";", t.aliases)+"\r\n");
 			
 			if (t.image_url != null)
 				builder.append("image_url = "+t.image_url+"\r\n");
