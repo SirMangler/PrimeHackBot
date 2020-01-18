@@ -136,7 +136,7 @@ public class TopicLoader {
 			if (t.aliases != null)
 				builder.append("aliases = "+String.join(";", t.aliases)+"\r\n");
 			
-			if (t.aliases != null)
+			if (t.channels != null)
 				builder.append("channels = "+String.join(";", t.channels)+"\r\n");
 			
 			if (t.image_url != null)

@@ -94,7 +94,7 @@ public class TopicCommands {
 			embedcontent.append("\n");
 			
 			embedcontent.append("**answer** = `"+t.answer+"`\n");
-			if (t.aliases != null) embedcontent.append("**aliases** = ` "+String.join(";", t.aliases)+" `\n");
+			if (t.aliases != null) embedcontent.append("**aliases** = `"+String.join(", ", t.aliases)+"`\n");
 			embedcontent.append("**image_url** = `"+t.image_url+"`\n");
 			
 			embed.setDescription(embedcontent);
@@ -168,7 +168,7 @@ public class TopicCommands {
 	
 	public static Message setAliases(String[] vars) {
 		if (vars.length < 2) {
-			return new MessageBuilder("Syntax: setAliases [topicname] [alias1;alias2]").build();
+			return new MessageBuilder("Syntax: setAliases [topicname] [alias1 alias2]").build();
 		}
 		
 		Topic t = TopicLoader.getTopic(vars[1]);
@@ -376,7 +376,7 @@ public class TopicCommands {
 				"```css\ngetTopic [topic] /*displays the topic*/```"+
 				"```css\nsetAnswer [topic] [answer] /*sets the response*/```"+
 				"```css\nsetImage [topic] [image_url] /*Set's the image to embed*/```"+
-				"```css\nsetWikiLink [topic] [link] /*sets the wiki_link*/```"+
+				"```css\nsetAliases [topic] [link] /*sets the wiki_link*/```"+
 				"```css\naddPattern [topic] [pattern] /*adds regex pattern*/```"+
 				"```css\nremovePattern [topic] [pattern] /*removes regex pattern*/```"+
 				"```css\nlistTopics /*Lists all topics.*/```"+

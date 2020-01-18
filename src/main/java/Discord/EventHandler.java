@@ -140,20 +140,23 @@ public class EventHandler extends ListenerAdapter {
 	
 	@Override
 	public void onMessageReactionAdd(MessageReactionAddEvent e) {
-		if (e.getMessageId().equals(Configuration.gate_message_id)) {
-			if (e.getReactionEmote().getName().equals(Configuration.gate_emote_id)) {
-				Role verified = e.getGuild().getRoleById(Configuration.gate_role_id);
-				if (verified == null) {
-					PrimeLogger.severe("Couldn't retrieve verified role.");
-				}
-				
-				e.getGuild().getController().addSingleRoleToMember(e.getMember(), verified).queue(success -> {}, failure -> {
-					failure.printStackTrace();
+		if (Configuration.gate_message_id != null)
+		{
+			if (e.getMessageId().equals(Configuration.gate_message_id)) {
+				if (e.getReactionEmote().getName().equals(Configuration.gate_emote_id)) {
+					Role verified = e.getGuild().getRoleById(Configuration.gate_role_id);
+					if (verified == null) {
+						PrimeLogger.severe("Couldn't retrieve verified role.");
+					}
 					
-					if (Configuration.botlog_channel_id != null)
-						e.getGuild().getTextChannelById(Configuration.botlog_channel_id)
-							.sendMessage("Couldn't give verified role to: `"+e.getMember().getEffectiveName()+"`. Error: "+failure.getMessage()).complete();
-				});;
+					e.getGuild().getController().addSingleRoleToMember(e.getMember(), verified).queue(success -> {}, failure -> {
+						failure.printStackTrace();
+						
+						if (Configuration.botlog_channel_id != null)
+							e.getGuild().getTextChannelById(Configuration.botlog_channel_id)
+								.sendMessage("Couldn't give verified role to: `"+e.getMember().getEffectiveName()+"`. Error: "+failure.getMessage()).complete();
+					});;
+				}
 			}
 		}
 	}

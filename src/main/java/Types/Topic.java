@@ -26,8 +26,11 @@ public class Topic {
 	
 	public static MessageEmbed displayTopic(Topic t, String invoker) {
 		String aliases = "";
-		if (t.aliases.length != 0)
-			aliases = ", !"+String.join(", !", t.aliases)+"";
+		
+		if (t.aliases != null) {
+			if (t.aliases.length != 0)
+				aliases = ", !"+String.join(", !", t.aliases)+"";
+		}
 
 		EmbedBuilder embed = new EmbedBuilder();
 		embed.setColor(Color.GREEN);
