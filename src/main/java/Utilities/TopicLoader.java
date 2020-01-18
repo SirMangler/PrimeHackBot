@@ -69,6 +69,12 @@ public class TopicLoader {
 				continue;
 			}
 			
+			if (line.startsWith("channels = ")) {
+				if (t.channels == null) t.channels = new ArrayList<String>();
+				t.channels.add(line.substring(11));
+				continue;
+			}
+			
 			if (line.startsWith("answer = ")) {
 				if (line.endsWith("\""))
 					t.answer = line.substring(9);
@@ -129,6 +135,9 @@ public class TopicLoader {
 			
 			if (t.aliases != null)
 				builder.append("aliases = "+String.join(";", t.aliases)+"\r\n");
+			
+			if (t.aliases != null)
+				builder.append("channels = "+String.join(";", t.channels)+"\r\n");
 			
 			if (t.image_url != null)
 				builder.append("image_url = "+t.image_url+"\r\n");

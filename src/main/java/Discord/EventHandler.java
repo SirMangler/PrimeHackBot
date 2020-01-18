@@ -56,7 +56,23 @@ public class EventHandler extends ListenerAdapter {
 			}
 			
 			TopicLoader.getAllTopics().forEach(topic -> {
-				if (topic.regex != null)
+				boolean restricted = false;
+				
+				if (topic.channels != null)
+				{
+					restricted = true;
+					
+					for (String c : topic.channels)
+					{
+						if (e.getTextChannel().getId().equals(c))
+						{
+							restricted = false;
+							break;
+						}
+					}
+				}
+				
+				if (topic.regex != null && restricted == false)
 					for (String pattern : topic.regex) {
 						if (Pattern.matches(pattern, e.getMessage().getContentRaw().toLowerCase())) {
 							e.getTextChannel().sendMessage(Topic.displayTopic(topic, "Triggered by: "+e.getMember().getEffectiveName())).queue(queueSuccess, queueError);
@@ -93,10 +109,39 @@ public class EventHandler extends ListenerAdapter {
 		}
 	}
 	
+
+	/*@Override
+	public void onMessageReactionAdd(MessageReactionAddEvent e) {
+		for (String id : entry_messages)
+		{
+			if (e.getMessageId().equals(id)) {
+				if (e.getReactionEmote().getName().equals(Configuration.gate_emote_id)) {
+					Role verified = e.getJDA().getRoleById(Configuration.gate_role_id);
+					if (verified == null) {
+						PrimeLogger.severe("Couldn't retrieve verified role.");
+					}
+					
+					verified.getGuild().getController().addSingleRoleToMember(verified.getGuild().getMember(e.getUser()), verified).queue(success -> {
+						entry_messages.remove(id);
+						e.getUser().openPrivateChannel().complete().sendMessage("Thank you. You now have access to the server.\n"
+								+ "Please be sure to see the <#385204907054989316> channel and the <#646907687254360074> before posting!"
+								+ "\nRemember: **All piracy discussion is against the rules**.").complete();
+					}, failure -> {
+						failure.printStackTrace();
+						e.getTextChannel().sendMessage("There has been an internal error. Please contact <@167445584142139394> or <@249003275976835074>").queue();
+						
+						e.getGuild().getTextChannelById("562547073459945489")
+							.sendMessage("Couldn't give verified role to: `"+e.getMember().getEffectiveName()+"`. Error: "+failure.getMessage()).complete();
+					});;
+				}
+			}
+		}
+	}*/
+	
 	@Override
 	public void onMessageReactionAdd(MessageReactionAddEvent e) {
 		if (e.getMessageId().equals(Configuration.gate_message_id)) {
-			if (e.getReactionEmote().getEmote().getId().equals(Configuration.gate_emote_id)) {
+			if (e.getReactionEmote().getName().equals(Configuration.gate_emote_id)) {
 				Role verified = e.getGuild().getRoleById(Configuration.gate_role_id);
 				if (verified == null) {
 					PrimeLogger.severe("Couldn't retrieve verified role.");
@@ -104,13 +149,27 @@ public class EventHandler extends ListenerAdapter {
 				
 				e.getGuild().getController().addSingleRoleToMember(e.getMember(), verified).queue(success -> {}, failure -> {
 					failure.printStackTrace();
-					e.getGuild().getTextChannelById("562547073459945489")
-						.sendMessage("Couldn't give verified role to: `"+e.getMember().getEffectiveName()+"`. Error: "+failure.getMessage()).complete();
+					
+					if (Configuration.botlog_channel_id != null)
+						e.getGuild().getTextChannelById(Configuration.botlog_channel_id)
+							.sendMessage("Couldn't give verified role to: `"+e.getMember().getEffectiveName()+"`. Error: "+failure.getMessage()).complete();
 				});;
 			}
 		}
 	}
-
+	
+	/*
+	@Override
+	public void onGuildMemberJoin(GuildMemberJoinEvent e)
+	{
+		e.getUser().openPrivateChannel().complete()
+				.sendMessage("Welcome to the official PrimeHack Discord server."
+						+ "\nYou can find the answers to most questions including an install guide, and tips on improving performance/FPS here: https://github.com/shiiion/dolphin/wiki/"
+						+ "\nBe sure to read <#646907687254360074> before posting."
+						+ "\n**Disclaimer: All piracy discussion including questions related to where you can obtain a copy of Metroid: Prime Trilogy, is against the rules.**").complete();
+	}
+	*/
+	
 	public Message parseCommand(String line) {
 		String[] vars = null;
 		if (line.contains(" ")) {
@@ -140,6 +199,10 @@ public class EventHandler extends ListenerAdapter {
 			return TopicCommands.addPattern(vars);
 		case "removepattern":
 			return TopicCommands.removePattern(vars);
+		case "addchannel":
+			return TopicCommands.addChannel(vars);
+		case "removechannel":
+			return TopicCommands.removeChannel(vars);
 		case "commands":
 			return TopicCommands.adminCommands(vars);
 		}

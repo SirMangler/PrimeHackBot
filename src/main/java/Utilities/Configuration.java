@@ -22,6 +22,7 @@ public class Configuration {
 	public static String gate_emote_id;
 	public static String gate_role_id;
 	public static String gate_message_id;
+	public static String botlog_channel_id;
 	
 	static Path cfgpath = Paths.get(System.getProperty("user.dir"), "primebot.cfg");
 	
@@ -56,11 +57,14 @@ public class Configuration {
 			case "gate-emote":				
 				gate_emote_id = val;
 				break;
-			case "gate-role":				
+			case "gate-role-id":				
 				gate_role_id = val;
 				break;
-			case "gate-react-message":				
+			case "gate-message-id":				
 				gate_message_id = val;
+				break;
+			case "botlog-channel-id":				
+				botlog_channel_id = val;
 				break;
 			case "bot-controller":
 				bot_controllers.add(val);
@@ -97,8 +101,9 @@ public class Configuration {
 		b.append("token="+token+"\n\r");
 		b.append("mute-role="+mute_role_id+"\n\r");
 		b.append("gate-emote="+gate_emote_id+"\n\r");
-		b.append("gate-role="+gate_role_id+"\n\r");
-		b.append("gate-react-message="+gate_message_id+"\n\r");
+		b.append("gate-role-id="+gate_role_id+"\n\r");
+		b.append("gate-message-id="+gate_message_id+"\n\r");
+		b.append("botlog-channel-id="+botlog_channel_id+"\n\r");
 		
 		for (String controller : bot_controllers) {
 			b.append("bot-controller="+controller+"\n\r");

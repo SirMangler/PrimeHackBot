@@ -71,7 +71,5 @@ public class PrimeBot {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 }

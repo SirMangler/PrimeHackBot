@@ -18,15 +18,20 @@ public class Topic {
 	public String answer;
 	public String image_url;
 	public String[] aliases;
+	public List<String> channels;
 	
 	public Topic(String topic) {
 		this.topic = topic;
 	}
 	
 	public static MessageEmbed displayTopic(Topic t, String invoker) {
+		String aliases = "";
+		if (t.aliases.length != 0)
+			aliases = ", !"+String.join(", !", t.aliases)+"";
+
 		EmbedBuilder embed = new EmbedBuilder();
 		embed.setColor(Color.GREEN);
-		embed.setTitle("🏷 !"+t.topic);
+		embed.setTitle("🏷 !"+t.topic+aliases);
 
 		if (invoker != null)
 			embed.setFooter(invoker, "https://i.imgur.com/TLaIRVU.png");

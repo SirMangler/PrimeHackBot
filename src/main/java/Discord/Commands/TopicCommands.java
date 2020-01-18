@@ -2,6 +2,7 @@ package Discord.Commands;
 
 import java.util.ArrayList;
 
+import Discord.PrimeBot;
 import Types.Topic;
 import Utilities.PrimeLogger;
 import Utilities.TopicLoader;
@@ -83,6 +84,15 @@ public class TopicCommands {
 				}
 			}
 			
+			if (t.channels != null) {
+				embedcontent.append("Limited To:\n");
+				for (int i = 0; i < t.channels.size(); i++) {
+					embedcontent.append("Channel #"+i+" `"+t.channels.get(i)+"`\n");
+				}
+			}
+			
+			embedcontent.append("\n");
+			
 			embedcontent.append("**answer** = `"+t.answer+"`\n");
 			if (t.aliases != null) embedcontent.append("**aliases** = ` "+String.join(";", t.aliases)+" `\n");
 			embedcontent.append("**image_url** = `"+t.image_url+"`\n");
@@ -158,7 +168,7 @@ public class TopicCommands {
 	
 	public static Message setAliases(String[] vars) {
 		if (vars.length < 2) {
-			return new MessageBuilder("Syntax: setWikiLink [topicname] [wiki_link]").build();
+			return new MessageBuilder("Syntax: setAliases [topicname] [alias1;alias2]").build();
 		}
 		
 		Topic t = TopicLoader.getTopic(vars[1]);
@@ -187,6 +197,79 @@ public class TopicCommands {
 			b.setContent("Set aliases.");
 			
 			return b.build();
+		}
+	}
+	
+	public static Message addChannel(String[] vars) {
+		if (vars.length < 2) {
+			return new MessageBuilder("Syntax: addChannel [topicname] [channel-id]").build();
+		}
+		
+		Topic t = TopicLoader.getTopic(vars[1]);
+		if (t == null) {
+			return new MessageBuilder("Topic `"+vars[1]+"` does not exist!").build();
+		} else {		
+			if (PrimeBot.jda.getTextChannelById(vars[2]) == null) {
+				return new MessageBuilder("Cannot find channel with ID `"+vars[2]+"`!").build();
+			}
+			
+			if (t.channels == null)
+				t.channels = new ArrayList<String>();
+			
+			t.channels.add(vars[2]);
+			
+			PrimeLogger.info("Add channel '%1' to topic '%2'", vars[2], t.topic);
+			
+			TopicLoader.setTopic(vars[1], t);
+			
+			Message m = getTopic(vars);
+			if (m.getEmbeds().isEmpty()) {
+				PrimeLogger.severe("Embeds is empty!");
+				return new MessageBuilder("Internal error.").build();
+			}
+			
+			MessageBuilder b = new MessageBuilder();
+			b.setEmbed(m.getEmbeds().get(0));
+			b.setContent("Added channel.");
+			
+			return b.build();
+		}
+	}
+	
+	public static Message removeChannel(String[] vars) {
+		if (vars.length < 2) {
+			return new MessageBuilder("Syntax: removeChannel [topicname] [channel-id]").build();
+		}
+		
+		Topic t = TopicLoader.getTopic(vars[1]);
+		if (t == null) {
+			return new MessageBuilder("Topic `"+vars[1]+"` does not exist!").build();
+		} else {
+			try {
+				int i = Integer.parseInt(vars[2]);
+				
+				if (t.channels == null)
+					return new MessageBuilder("Topic `"+vars[1]+"` does not contain any channel IDs!").build();
+					
+				t.channels.remove(i);
+				PrimeLogger.info("Removing channel '%1' from topic '%2'", vars[2], vars[1]);
+				
+				TopicLoader.setTopic(vars[1], t);
+				
+				Message m = getTopic(vars);
+				if (m.getEmbeds().isEmpty()) {
+					PrimeLogger.severe("Embeds is empty!");
+					return new MessageBuilder("Internal error.").build();
+				}
+				
+				MessageBuilder b = new MessageBuilder();
+				b.setEmbed(m.getEmbeds().get(0));
+				b.setContent("Removed channel.");
+				
+				return b.build();
+			} catch (NumberFormatException e) {
+				return new MessageBuilder("Given index '"+vars[2]+"' is not a number!").build();
+			}
 		}
 	}
 	
