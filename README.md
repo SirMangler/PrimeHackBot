@@ -9,6 +9,7 @@ The Adam Malkocich bot made for the [PrimeHack Discord](https://discord.gg/hYp5N
 - addTopic [topic] `Adds the topic.`
 - removeTopic [topic] `Removes the topic`
 - getTopic [topic] `Displays the moderator view for the topic`
+- listTopics `Lists all topics`
  
 ### Topic Configuration 
 - setAnswer [topic] [answer] `Assigns an answer/description to the topic`
@@ -24,8 +25,7 @@ The Adam Malkocich bot made for the [PrimeHack Discord](https://discord.gg/hYp5N
 - warn [user] [reason] `Warns a user for the specified reason, and issues a punishment.`
 - warns [user] `Lists a user's past warnings`
  
-### General Commands 
-- listTopics `Lists all topics`
+### Miscellaneous Commands 
 - commands `Shows this list`
 - ping   `Pong!` 
  
