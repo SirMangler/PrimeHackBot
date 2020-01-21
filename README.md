@@ -5,12 +5,12 @@ The Adam Malkocich bot made for the [PrimeHack Discord](https://discord.gg/hYp5N
 
 # Commands
  
-## Basic Topic Commands
+### Basic Topic Commands
 - addTopic [topic] `Adds the topic.`
 - removeTopic [topic] `Removes the topic`
 - getTopic [topic] `Displays the moderator view for the topic`
  
-## Topic Configuration 
+### Topic Configuration 
 - setAnswer [topic] [answer] `Assigns an answer/description to the topic`
 - setAliases [topic] [alias 1 alias2 alias3] `Sets the aliases/alternative commands.`
  
@@ -20,11 +20,11 @@ The Adam Malkocich bot made for the [PrimeHack Discord](https://discord.gg/hYp5N
 - addChannel [topic] [pattern] `Adds a Regex Pattern to the detector`
 - removeChannel [topic] [index] `Removes a Regex Pattern from the detector`
  
-## Moderator Commands
+### Moderator Commands
 - warn [user] [reason] `Warns a user for the specified reason, and issues a punishment.`
 - warns [user] `Lists a user's past warnings`
  
-## General Commands 
+### General Commands 
 - listTopics `Lists all topics`
 - commands `Shows this list`
 - ping   `Pong!` 
