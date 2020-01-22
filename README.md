@@ -1,5 +1,13 @@
-# Adam Malkocich Bot
-The Adam Malkocich bot made for the [PrimeHack Discord](https://discord.gg/hYp5Naz).
+![](https://i.imgur.com/I0Njr7i.png)
+
+The Adam Malkocich moderation/user help bot made for the [PrimeHack Discord](https://discord.gg/hYp5Naz).
+
+# Examples
+## Auto Response
+![](https://i.imgur.com/dNEwrlz.gif)
+
+## Manually Triggering
+![](https://i.imgur.com/IEUEWlP.gif)
 
 [Here is an example/guide on how to make an auto-reponse topic.](https://github.com/SirMangler/PrimeHackBot/wiki/Creating-a-decent-topic.)
 
