@@ -7,7 +7,7 @@ The Adam Malkocich moderation/user help bot made for the [PrimeHack Discord](htt
 ![](https://i.imgur.com/dNEwrlz.gif)
 
 ## Manually Triggering
-![](https://i.imgur.com/IEUEWlP.gif)
+![](https://i.imgur.com/m1iHzjk.gif)
 
 [Here is an example/guide on how to make an auto-reponse topic.](https://github.com/SirMangler/PrimeHackBot/wiki/Creating-a-decent-topic.)
 
