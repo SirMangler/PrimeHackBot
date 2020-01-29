@@ -55,7 +55,7 @@ public class EventHandler extends ListenerAdapter {
 				}
 			}
 			
-			TopicLoader.getAllTopics().forEach(topic -> {
+			for (Topic topic : TopicLoader.getAllTopics()) {
 				boolean restricted = false;
 				
 				if (topic.channels != null)
@@ -103,9 +103,10 @@ public class EventHandler extends ListenerAdapter {
 						if (e.getGuild().getSelfMember().hasPermission(new Permission[] { Permission.MESSAGE_MANAGE }))
 							e.getMessage().delete().complete();
 					}, queueError);
+					
 					return;
 				}
-			});
+			}
 		}
 	}
 	
