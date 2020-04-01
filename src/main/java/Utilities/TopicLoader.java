@@ -75,18 +75,20 @@ public class TopicLoader {
 				continue;
 			}
 			
-			if (line.startsWith("answer = ")) {
-				if (line.endsWith("\""))
-					t.answer = line.substring(9);
-				else {
+			if (line.startsWith("answer = \"")) {
+				if (line.endsWith("\"") && line.charAt(9) == '\"') {
+					line = line.substring(10);
+					t.answer = line.substring(0, line.length()-1);
+				} else {
 					answer = new StringBuilder();
 					answer.append(line.substring(10));
 				}
+				
 				continue;
 			}
 			
-			if (line.startsWith("image_url = \"")) {
-				t.image_url = line.substring(13);
+			if (line.startsWith("image_url = ")) {
+				t.image_url = line.substring(12);
 				continue;
 			}
 			
