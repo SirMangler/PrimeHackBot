@@ -1,6 +1,12 @@
 package Discord;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,12 +16,13 @@ import Utilities.Configuration;
 import Utilities.PrimeLogger;
 import Utilities.TopicLoader;
 import Utilities.WarnsLoader;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.Game.GameType;
-import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 
 /**
  * @author SirMangler
@@ -27,7 +34,10 @@ public class PrimeBot {
 	public static List<Role> botroles = new ArrayList<Role>();
 
 	public static JDA jda;
-	public static void main(String[] args) {
+	public static void main(String[] args) {	
+		if (args.length == 1 && args[0].equalsIgnoreCase("debug"))
+			Configuration.debug = true;
+		
 		try {
 			try {
 				Configuration.loadConfiguration();
@@ -52,7 +62,8 @@ public class PrimeBot {
 			}
 			
 			PrimeLogger.info("Connecting to Discord");
-			jda = new JDABuilder(AccountType.BOT).setToken(Configuration.token).buildBlocking();
+			jda = JDABuilder.createDefault(Configuration.token).build();
+			jda.awaitReady();
 			
 			PrimeLogger.info("Adding EventHandler");
 			jda.addEventListener(new EventHandler());
@@ -64,12 +75,51 @@ public class PrimeBot {
 				} else botroles.add(r);			
 			});
 			
-			jda.getPresence().setGame(Game.of(GameType.LISTENING, "the depths of space"));	
+			jda.getPresence().setActivity(Activity.listening("the depths of space"));
+
+			try {
+				System.setProperty("java.awt.headless", "true");
+				
+				loadFonts();
+			} catch (FontFormatException | IOException e) {
+				PrimeLogger.severe("Failed to load fonts.");
+				e.printStackTrace();
+			}
 		} catch (LoginException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+
+		try {
+			BufferedReader reader =  
+	                new BufferedReader(new InputStreamReader(System.in)); 
+			
+			String line;
+				while ((line = reader.readLine()) != null) {
+					if (line.equalsIgnoreCase("shutdown")) {
+						jda.shutdown();
+						System.exit(0);
+					}
+				}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static void loadFonts() throws FontFormatException, IOException {
+		GraphicsEnvironment ge = 
+		         GraphicsEnvironment.getLocalGraphicsEnvironment();
+		
+		File pig = new File("pig.ttf");
+		File sub = new File("sub.ttf");
+		
+		if (pig.exists())
+		     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("pig.ttf")));
+		     
+		if (sub.exists())
+		     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("sub.ttf")));
 	}
 
 }

@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 import Types.Topic;
 
@@ -20,7 +21,9 @@ public class TopicLoader {
 	static Path topicspath = Paths.get(System.getProperty("user.dir"), "topics.cfg");
 	
 	static List<Topic> topics = new ArrayList<Topic>();
-
+	static TreeMap<String, Topic> topic_aliases = new TreeMap<String, Topic>(String.CASE_INSENSITIVE_ORDER);
+	
+	
 	public static void loadTopics() throws IOException {
 		PrimeLogger.info("Loading Topics");
 		
@@ -76,7 +79,7 @@ public class TopicLoader {
 			}
 			
 			if (line.startsWith("answer = \"")) {
-				if (line.endsWith("\"") && line.charAt(9) == '\"') {
+				if (line.length() < 1 && line.endsWith("\"") && line.charAt(9) == '\"') {
 					line = line.substring(10);
 					t.answer = line.substring(0, line.length()-1);
 				} else {
@@ -107,10 +110,34 @@ public class TopicLoader {
 		if (t != null) {
 			topics.add(t);
 		}
+		
+		topic_aliases = new TreeMap<String, Topic>();
+		
+//		List<Entry<String, Topic>> temp = new LinkedList<Entry<String, Topic>>();
+//		temp.sort(new Comparator<Entry<String, Topic>>() {
+//
+//			@Override
+//			public int compare(Entry<String, Topic> a, Entry<String, Topic> b) {				
+//				return a.getKey().length() > b.getKey().length() ? -1 : 1;
+//			}
+//		
+//		});
+		
+		for (Topic topic : topics) {
+			topic_aliases.put(topic.topic, topic);
+			
+			if (topic.aliases != null) {
+				for (String a : topic.aliases) {
+					topic_aliases.put(a, topic);
+				}
+			}
+		}
 	}
 
 	public static void saveTopics() {
 		PrimeLogger.info("Saving Topics");
+		
+		topic_aliases.clear();
 		
 		if (!Files.exists(topicspath)) {
 			try {
@@ -145,8 +172,16 @@ public class TopicLoader {
 				builder.append("image_url = "+t.image_url+"\r\n");
 			
 			builder.append("\r\n");
+			
+			topic_aliases.put(t.topic, t);
+			
+			if (t.aliases != null) {
+				for (String a : t.aliases) {
+					topic_aliases.put(a, t);
+				}
+			}
 		}
-		
+			
 		try {
 			Files.write(topicspath, builder.toString().getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (IOException e) {
@@ -185,6 +220,19 @@ public class TopicLoader {
 		}
 		
 		return topics;
+	}
+	
+	public static TreeMap<String, Topic> getAllAliases() {
+		if (topics == null) {
+			try {
+				loadTopics();
+			} catch (IOException e) {
+				PrimeLogger.severe("Failed to load Topics!");
+				e.printStackTrace();
+			}
+		}
+		
+		return topic_aliases;
 	}
 
 	public static Topic getTopic(String name) {

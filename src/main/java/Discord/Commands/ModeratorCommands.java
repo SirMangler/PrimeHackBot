@@ -9,13 +9,13 @@ import Types.WarnMember;
 import Utilities.Configuration;
 import Utilities.PrimeLogger;
 import Utilities.WarnsLoader;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Emote;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.Role;;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
 
 /**
  * @author SirMangler
@@ -79,7 +79,7 @@ public class ModeratorCommands {
 			case 4: {
 				b.setDescription(m.getAsMention()+" has been banned.");
 				b.setFooter("Final warning has been met.", hammer_url);
-				m.getGuild().getController().ban(m, 0, "Fourth warning issued by bot command.").complete();
+				m.getGuild().ban(m, 0, "Fourth warning issued by bot command.").complete();
 				
 				break;
 			}
@@ -127,6 +127,43 @@ public class ModeratorCommands {
 			return new MessageBuilder("Unknown number '"+vars[2]+"'").build();
 		}
 		
+		index--; // Displayed list starts from 1
+		
+		WarnMember m = WarnsLoader.getWarnMember(vars[1]);
+		if (m == null) {
+			PrimeLogger.info("Cannot find WarnMember: '%1' (%2)", display_name, vars[1]);
+			return new MessageBuilder("Cannot find warnings for: "+display_name).build();
+		}
+
+		if (m.warnings.isEmpty())
+			return new MessageBuilder("Member `"+display_name+"` has no warnings!").build();
+
+		if (m.warnings.size() <= index) {
+			return new MessageBuilder("There is no warning index of: " + (index + 1)).build();
+		}
+		
+		WarnsLoader.removeWarning(m.user_id, index);
+		
+		if (WarnsLoader.getWarnMember(vars[1]).warnings.isEmpty()) {
+			return new MessageBuilder("Last warning removed. No more warnings to display.").build();
+		}
+		
+		return getWarns(vars, display_name);
+	}
+	
+
+	public static Message toDo(String[] vars, String display_name) {
+		if (vars.length < 2) {
+			return new MessageBuilder("Syntax: todo [idkmijad]").build();
+		}
+		
+		int index;
+		try {
+			index = Integer.parseInt(vars[2]);
+		} catch (NumberFormatException e) {
+			return new MessageBuilder("Unknown number '"+vars[2]+"'").build();
+		}
+		
 		WarnMember m = WarnsLoader.getWarnMember(vars[1]);
 		if (m == null) {
 			PrimeLogger.info("Cannot find WarnMember: '%1' (%2)", display_name, vars[1]);
@@ -138,15 +175,18 @@ public class ModeratorCommands {
 
 		WarnsLoader.removeWarning(m.user_id, index-1);
 		
+		if (WarnsLoader.getWarnMember(vars[1]).warnings.isEmpty()) {
+			return new MessageBuilder("Last warning removed. No more warnings to display.").build();
+		}
+		
 		return getWarns(vars, display_name);
 	}
-	
 	
 	public static Message gateReactRole(String[] vars, Message input) {
 		if (vars.length < 3)
 			return new MessageBuilder("Syntax: gateReactRole [message-id] [@role|role-id] [emote-name|emote-id]").build();
 		
-		Message m = input.getChannel().getMessageById(vars[1]).complete();
+		Message m = input.getChannel().retrieveMessageById(vars[1]).complete();
 		
 		if (m == null) 
 			return new MessageBuilder("Cannot find message: "+vars[1]).build();
@@ -185,7 +225,7 @@ public class ModeratorCommands {
 	private static Thread warnclock;
 	public static void mute(Member m, int durationMinute) {
 		muted.put(m, System.currentTimeMillis() + (durationMinute * 60000));
-		m.getGuild().getController().addSingleRoleToMember(m, warnrole).complete();
+		m.getGuild().addRoleToMember(m, warnrole).complete();
 		
 		if (warnclock == null || !warnclock.isAlive()) {
 			warnclock = new Thread(new WarnClock());
@@ -208,8 +248,7 @@ class WarnClock implements Runnable {
 					if (time > entry.getValue()) {
 						entry.getKey()
 							.getGuild()
-							.getController()
-							.removeSingleRoleFromMember(entry.getKey(), ModeratorCommands.warnrole).complete();
+							.removeRoleFromMember(entry.getKey(), ModeratorCommands.warnrole).complete();
 						
 						ModeratorCommands.muted.remove(entry.getKey());
 					}

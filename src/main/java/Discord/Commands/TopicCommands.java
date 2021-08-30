@@ -6,10 +6,9 @@ import Discord.PrimeBot;
 import Types.Topic;
 import Utilities.PrimeLogger;
 import Utilities.TopicLoader;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.entities.Message;
-
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
 /**
  * @author SirMangler
  *
@@ -93,8 +92,12 @@ public class TopicCommands {
 			
 			embedcontent.append("\n");
 			
-			embedcontent.append("**answer** = `"+t.answer+"`\n");
-			if (t.aliases != null) embedcontent.append("**aliases** = `"+String.join(", ", t.aliases)+"`\n");
+			if (t.answer != null && !t.answer.isEmpty()) 
+				embedcontent.append("**answer** = ```"+t.answer+"```\n");
+			
+			if (t.aliases != null) 
+				embedcontent.append("**aliases** = `"+String.join(", ", t.aliases)+"`\n");
+			
 			embedcontent.append("**image_url** = `"+t.image_url+"`\n");
 			
 			embed.setDescription(embedcontent);
@@ -382,6 +385,7 @@ public class TopicCommands {
 				"```css\nlistTopics /*Lists all topics.*/```"+
 				"```css\ncommands /*Shows this.*/```"+
 				"```css\nwarn [user] [reason] /*Warns the user*/```"+
+				"```css\nremoveWarn [user] [index]/*Removes a user's warning.*/```"+
 				"```css\nwarns [user] /*Lists a user's warns.*/```"+
 				"```css\ngatereactionrole /*Set's up a reaction role designed to be a gateway.*/```"
 				);

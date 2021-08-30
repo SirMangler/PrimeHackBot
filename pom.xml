@@ -2,20 +2,15 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>sirmangler</groupId>
   <artifactId>PrimeHackBot</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.1</version>
   <name>PrimeHackBot</name>
   
  <repositories>
 	<repository>
 	    <id>jcenter</id>
 	    <name>jcenter-bintray</name>
-	    <url>http://jcenter.bintray.com</url>
+	    <url>https://jcenter.bintray.com</url>
 	</repository>
-    <repository>
-        <id>central</id>
-        <name>bintray</name>
-        <url>http://jcenter.bintray.com</url>
-    </repository>
   </repositories>
   
   <dependencies>
@@ -24,11 +19,11 @@
       <artifactId>json</artifactId>
       <version>20180813</version>
     </dependency>
-	<dependency>
-	    <groupId>net.dv8tion</groupId>
-	    <artifactId>JDA</artifactId>
-	    <version>3.5.1_350</version>
-	</dependency>
+<dependency>
+  <groupId>net.dv8tion</groupId>
+  <artifactId>JDA</artifactId>
+  <version>4.2.0_168</version>
+</dependency>
   <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
